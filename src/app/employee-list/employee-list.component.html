@@ -1,0 +1,79 @@
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Job Title</th>
+      <th>Age</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Actions<button (click)="showEmployeePopup()">Add</button></th>
+    </tr>
+  </thead>
+  <tbody *ngIf="employees">
+    <tr>
+      <td colspan="7">
+        <form [formGroup]="filterEmployeeForm">
+          <input type="text" formControlName="name" placeholder="Search By Name">
+          <input type="text" formControlName="jobTitle" placeholder="Job Title">
+          <input type="text" formControlName="age" (keypress)="isNumber($event)" placeholder="Age">
+          <button type="submit" (click)="filterEmployee()">Filter</button>
+          <button (click)="resetFilter()">Reset</button>
+        </form>
+        
+      </td>
+    </tr>
+    <tr *ngFor="let employee of employees">
+      <td>{{ employee.id }}</td>
+      <td>{{ employee.name }}</td>
+      <td>{{ employee.jobTitle }}</td>
+      <td>{{ employee.age }}</td>
+      <td>{{ employee.startDate }}</td>
+      <td>{{ employee.endDate }}</td>
+      <td>
+        <button (click)="showEmployee(employee.id)">View</button>
+        <button *ngIf="isEmpDelete" (click)="deleteEmployee(employee.id)">Delete</button>
+      </td>
+    </tr>
+    <tr>
+      <td *ngIf="employees.length === 0" colspan="6">No employees found</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="showAddEmployeePopup">
+  <form [formGroup]="addEmployeeForm">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" formControlName="name">
+      <div
+        *ngIf="(addEmployeeForm.get('name')?.invalid && addEmployeeForm.get('name')?.touched) || addEmployeeForm.get('name')?.dirty">
+        <small class="text-danger" *ngIf="addEmployeeForm.get('name')?.errors?.required">
+          Name is required
+        </small>
+      </div>
+    </div>
+    <div>
+      <label for="jobTitle">Job Title:</label>
+      <input type="text" id="jobTitle" formControlName="jobTitle">
+      <div
+        *ngIf="(addEmployeeForm.get('jobTitle')?.invalid && addEmployeeForm.get('jobTitle')?.touched) || addEmployeeForm.get('jobTitle')?.dirty">
+        <small class="text-danger" *ngIf="addEmployeeForm.get('jobTitle')?.errors?.required">
+          Job Title is required
+        </small>
+      </div>
+    </div>
+    <div>
+      <label for="age">Age:</label>
+      <input type="text" id="age" formControlName="age" (keypress)="isNumber($event)" >
+      <div
+        *ngIf="(addEmployeeForm.get('age')?.invalid && addEmployeeForm.get('age')?.touched) || addEmployeeForm.get('age')?.dirty">
+        <small class="text-danger" *ngIf="addEmployeeForm.get('age')?.errors?.required">
+          Age is required
+        </small>
+      </div>
+    </div>
+    <button type="submit"  [disabled]="addEmployeeForm?.invalid" (click)="addEmployee()">Save</button>
+    <button (click)="showAddEmployeePopup = false">Cancel</button>
+  </form>
+</div>
