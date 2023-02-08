@@ -46,6 +46,12 @@ export class EmployeeListComponent implements OnInit {
     this.showAddEmployeePopup = true;
   }
 
+  cancelEmployeePopup() {
+    this.showAddEmployeePopup = false;
+    this.employeeId = -1;
+    this.addEmployeeForm.reset();
+  }
+
   addEmployee() {
     if (this.addEmployeeForm.valid) {
       if (this.employeeId >= 0) {
